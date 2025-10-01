@@ -54,7 +54,7 @@
 **Example:**  
 *Mauricio - Backend, Justin - Project Lead, Claudia - Frontend.*  
 
-Eric - Frontend, June - Frontend, Christian - Backend, Wulong - Backend
+Eric: Frontend, June: Frontend, Christian: Backend, Wulong: Backend
 
 ---
 
