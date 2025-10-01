@@ -54,17 +54,16 @@
 **Example:**  
 *Mauricio - Backend, Justin - Project Lead, Claudia - Frontend.*  
 
-Eric - Frontend
-June - Frontend
-Christian - Backend
-Wulong - Backend
+Eric - Frontend, June - Frontend, Christian - Backend, Wulong - Backend
 
 ---
 
 # Tech Stacks
 
 **Q6:** Which tech stacks will your group use? (Django + React or Flask + React)
-Flask + React
+
+We will use Flask + React
+
 ---
 # Full Stack Group Project Track  
 ---
