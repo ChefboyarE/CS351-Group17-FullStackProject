@@ -2,7 +2,7 @@
 
 **Q1:** At what time in the week would your group be available to meet online?  
 **Example:**    
-*Our weekly meeting will be ???day ??am-??pm.*  
+*Our weekly meeting will be Thursday 6pm-7pm.*  
 
 ---
 
@@ -23,15 +23,15 @@
 **Q3a:** How can your group communicate when doing the Full Stack Group Project?  
 **Q3b:** What are the usernames of each group member on that platform?  
 **Q3c:** What is your group’s expected response time to messages?  
-
-**Example:**  
+  
 *We will use Discord for communication*  
 
 *Usernames:*  
-*Justin - ghostmechanic*  
-*Claudia - ninth.py*  
-*Mauricio - itsperi*  
-*Our expected response time will be within 12 hours.*  
+*Eric - its_too_ez*  
+*June - yuwol*  
+*Christian - burpeem*
+*Wulong - wqq10*  
+*Our expected response time will be within 6 hours.* 
 
 ---
 
