@@ -29,7 +29,7 @@
 *Usernames:*  
 *Eric - its_too_ez*  
 *June - yuwol*  
-*Christian - burpeem*
+*Christian - burpeem*  
 *Wulong - wqq10*  
 *Our expected response time will be within 6 hours.* 
 
@@ -43,16 +43,13 @@
 **Example:**  
 *If there is a disagreement on direction, we will resolve it with a unanimous vote.*  
 *If team members do not pull their weight, the team will politely remind them of their duties.*  
-*If they continue to not pull their weight, then they will get another warning and a chance to start being more productive.*  
+*If they continue to not pull their weight, If they continue to not pull their weight, then the other members will inform the professor.*  
 
 ---
 
 # Roles  
 
 **Q5:** How will your group divide your role in the Group Project?  
-
-**Example:**  
-*Mauricio - Backend, Justin - Project Lead, Claudia - Frontend.*  
 
 Eric: Frontend, June: Frontend, Christian: Backend, Wulong: Backend
 
@@ -70,35 +67,46 @@ We will use Flask + React
 
 # Track 1: Tackling Generative AI Consequences
 **Problem 1:** 
+There’s no easy way for local Chicago creators to track or flag unauthorized use of their work on social media platforms.
 
 **Solution 1:** 
+Build a web app where users can upload their artwork and use a simple image-matching tool to flag potential unauthorized use in AI-generated content online.
 
 ---
 
 # Track 2: Technology for Public Goods 
 
 **Problem 2:**
+UIC students, especially first-generation and commuter students from diverse backgrounds, struggle to find affordable campus resources like free tutoring, mental health drop-ins, or cultural events due to fragmented information, leading to isolation and lower engagement.
 
 **Solution 2:** 
+A web app called the UIC Student Resource Connector that provides a searchable list of UIC-specific resources (e.g., tutoring, Latino Cultural Center events) and a request board for students to post needs (e.g., "Looking for a Spanish convo partner"), fostering community and accessibility.
 
 **Problem 3:** 
+In many neighborhoods, food waste is high while there are so many families that struggle with food insecurity.
 
 **Solution 3:**  
+Build a food sharing platform in the form of a web + mobile app that connects restaurants, grocery stores, and households with local shelters or community members in need.
 
 # Track 3: Creative Coding and Cultural Expression
 
 **Idea - Story - Inspiration 4:**
+Music and art are both ways people express themselves, and I wanted to combine the two into a playful, interactive experience.
 
 **Implementation 4:**
+Develop a web app where each keyboard key (or mouse click) plays a sound and simultaneously creates a colorful shape or brushstroke on the screen
 
 **Idea - Story - Inspiration 5:**
+This project is inspired by the idea of turning simple doodles into something artistic and relaxing, while also showing how math and symmetry can create beauty.
 
 **Implementation 5:**
+Develop an app where the user can draw with their mouse, and every stroke is mirrored across multiple axes in real time, forming a kaleidoscope or mandala effect.
 
 
 # Idea Finalization
 
 **From 5 project ideas you have above, please choose one of the project that you are going with for the rest of the semester. Explain why you are going with that project**
+We will be going with Track 2 - Problem 2 as it can be benificial to the UIC community gaining more access and information on local events or resources. 
 
 # Extra Credit (Only do this if you are done with Idea Finalization)
 
