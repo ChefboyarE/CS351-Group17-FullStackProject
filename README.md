@@ -9,12 +9,9 @@
 # Timeline: Weekly Meeting Goals  
 
 **Q2:** What is your goals that your group want to achieve in each weekly meeting?  
-**Example:**  
-*Prior to 3/13: Weekly Meeting we will plan out some preliminary info/idea for the project itself ahead of the scheduled meeting like which data source/API and data structures we will use in our backend. We will browse [the given list of public APIs for inspiration](https://github.com/public-apis/public-apis).*  
-
-*During week of 3/25: Work on the project rough draft itself to make a functioning project with data input, data structure usage, and processing into output on the frontend.*  
-
-*Prior to 4/17: Meet together weekly to target project weakpoints/bugs and possibly visit office hours to get guidance if the progress feels weak.*  
+*Discuss weekly progress of each member of what they developed in the past week.*  
+*Discuss the following week’s plan for each member of what they look forward to develop and showcase at the next weekly group meeting*  
+*Discuss and share feedback by reviewing each members’ weekly progress for possible error catches or tips on improvement*  
 
 ---
 
@@ -105,7 +102,7 @@ Develop an app where the user can draw with their mouse, and every stroke is mir
 
 # Idea Finalization
 
-**From 5 project ideas you have above, please choose one of the project that you are going with for the rest of the semester. Explain why you are going with that project**
+**From 5 project ideas you have above, please choose one of the project that you are going with for the rest of the semester. Explain why you are going with that project**  
 We will be going with Track 2 - Problem 2 as it can be benificial to the UIC community gaining more access and information on local events or resources. 
 
 # Extra Credit (Only do this if you are done with Idea Finalization)
