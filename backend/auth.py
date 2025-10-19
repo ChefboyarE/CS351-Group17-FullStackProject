@@ -20,30 +20,30 @@ def home():
 def login():
     if request.method == 'POST':
         # get the form data
-        username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
         # look for user in database
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(email=email).first()
         # check to see if user and password match
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
             # log in user and store their info
             return redirect(url_for("auth.dashboard"))
         else:
-            flash("Login Unsuccessful. Please check username and password.")
+            flash("Login Unsuccessful. Please check email and password.")
     return render_template("login.html")
 
 # Handle user registration for creating a new account
 @auth.route("/signup", methods=['GET', 'POST'])
 def signup():
     if request.method == "POST":
-        username = request.form.get("username")
+        email = request.form.get("email")
         password = bcrypt.generate_password_hash(request.form.get("password")).decode("utf-8")
         # check if username already exists
-        if User.query.filter_by(username=username).first():
+        if User.query.filter_by(email=email).first():
             flash("Username already exists", "warning")
         else:
-            new_user = User(username=username, password=password)
+            new_user = User(email=email, password=password)
             # add the new user to the database
             db.session.add(new_user)
             db.session.commit()
