@@ -1,10 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>Landing Page</title>
+    <style>
+        /* Simple styling for suggestions dropdown */
+        #suggestions {
+            border: 1px solid #ccc;
+            max-width: 200px;
+            margin-top: 0;
+            padding-left: 0;
+            list-style-type: none;
+            position: absolute;
+            background: white;
+        }
+        #suggestions li {
+            padding: 5px;
+            cursor: pointer;
+        }
+        #suggestions li:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
 </head>
 <body>
-$END$
+    <h1>Welcome!</h1>
+    <form id="searchForm" style="display:flex; width:100%;">
+        <input type="text" id="query" name="query" placeholder="Search resources" autocomplete="off">
+        <button type="submit" class="filter-btn">Filter</button>
+    </form>
+    <ul id="suggestions"></ul>
+    <p id="result"></p>
+
+    <script>
+        const form = document.getElementById("searchForm");
+        const input = document.getElementById("query");
+        const suggestionsList = document.getElementById("suggestions");
+        const result = document.getElementById("result");
+
+        // Handle form submission
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const query = input.value;
+            const res = await fetch("/search", {
+                method: "POST",
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                body: new URLSearchParams({query})
+            });
+            const data = await res.json();
+            result.innerText = data.result;
+            suggestionsList.innerHTML = ""; // Clear suggestions after search
+        });
+
+        // Handle autocomplete suggestions
+        input.addEventListener("input", async () => {
+            const query = input.value;
+            if (!query) {
+                suggestionsList.innerHTML = "";
+                return;
+            }
+
+            const res = await fetch(`/suggest?query=${query}`);
+            const suggestions = await res.json();
+
+            suggestionsList.innerHTML = suggestions
+                .map(s => `<li onclick="selectSuggestion('${s}')">${s}</li>`)
+                .join("");
+        });
+
+        // Fill input when a suggestion is clicked
+        function selectSuggestion(word) {
+            input.value = word;
+            suggestionsList.innerHTML = "";
+        }
+    </script>
 </body>
 </html>

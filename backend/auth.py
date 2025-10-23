@@ -28,7 +28,8 @@ def login():
         if user and bcrypt.check_password_hash(user.password, password):
             login_user(user)
             # log in user and store their info
-            return redirect(url_for("auth.dashboard"))
+            return redirect(url_for("main.resources"))
+            # return redirect(url_for("main.index"))
         else:
             flash("Login Unsuccessful. Please check email and password.")
     return render_template("login.html")

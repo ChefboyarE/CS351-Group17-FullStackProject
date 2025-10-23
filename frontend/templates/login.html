@@ -67,12 +67,13 @@
 </head>
 <body>
     <div class="login-container">
-        <h1>UIC Resources</h1>
-        <form>
-            <input type="email" placeholder="UIC Email" required>
-            <input type="password" placeholder="Password" required>
+        <h1>Login</h1>
+        <form method="POST">
+            <input name="email" type="email" placeholder="Email" required><br>
+            <input name="password" type="password" placeholder="Password" required><br>
             <button type="submit">Login</button>
         </form>
+        <p>No account? <a href="{{ url_for('auth.signup') }}">Sign up</a></p>
     </div>
 </body>
 </html>
