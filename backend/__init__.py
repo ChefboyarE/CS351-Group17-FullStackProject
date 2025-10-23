@@ -47,4 +47,8 @@ def create_app():
     # testing
     print("Database URI:", app.config["SQLALCHEMY_DATABASE_URI"])
 
+    #initialize database
+    with app.app_context():
+        db.create_all()
+
     return app

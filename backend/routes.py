@@ -1,5 +1,7 @@
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, redirect, url_for
 from backend.trie import Trie
+from backend.models import Event
+from backend import db
 
 # Create a Blueprint for the landing page
 main = Blueprint('main', __name__)
@@ -13,6 +15,22 @@ for word in sample_words:
 @main.route("/resources")
 def resources():
     return render_template("resourceList.html")
+
+# route for event submissions
+@main.route("/resourceSubmission", methods=["POST", "GET"])
+def resourceSubmission():
+    if request.method == "POST":
+        title = request.form['title']
+        date = request.form['date']
+        location = request.form['location']
+        description = request.form['description']
+        # add event to the databbase
+        new_event = Event(title=title, date=date, location=location, description=description)
+        db.session.add(new_event)
+        db.session.commit()
+        # redirect back to resources page
+        return redirect(url_for("main.resources"))
+    return render_template("resourceSubmission.html")
 
 @main.route("/index")
 def index():
