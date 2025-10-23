@@ -8,6 +8,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
+
 # Initialize the Flask extensions
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -38,5 +39,12 @@ def create_app():
     app.register_blueprint(auth)
 
     from backend import models
+
+    # testing for the search bar
+    from backend.routes import main
+    app.register_blueprint(main)
+
+    # testing
+    print("Database URI:", app.config["SQLALCHEMY_DATABASE_URI"])
 
     return app
