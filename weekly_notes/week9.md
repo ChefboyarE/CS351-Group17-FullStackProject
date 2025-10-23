@@ -1,0 +1,4 @@
+- Checked on frontend login and resource list screens .
+- Discussed how screens match Figma wireframe flow and potential for signup screen addition
+- Talked about backend plans and peer review prep
+- Next steps: Complete frontend styling and finalizations for first two screens

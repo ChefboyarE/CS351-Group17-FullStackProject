@@ -1,0 +1,4 @@
+- Reviewed progress on Figma wireframes for app screens and suggested changes
+- Discussed frontend styling ideas and backend structure
+- Talked about possible data structures for resource storage (trie)
+- Next steps: Finalize Figma, start frontend templates

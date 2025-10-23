@@ -1,0 +1,4 @@
+- Discussed the general project idea: app for UIC students to access resources and events easily.
+- Talked about the initial scope and user flow.
+- Planned to start Figma wireframes to show the login, resource list, and resource submission screens
+- Next steps: Assign tasks, begin wireframes
