@@ -2,7 +2,7 @@
 Handles all routes related to authentication and user sessions
 Includes login, signup, logout, and a protected dashboard route
 """
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, request, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from backend import db, bcrypt
 from backend.models import User
@@ -10,58 +10,65 @@ from backend.models import User
 # Create a Blueprint
 auth = Blueprint('auth', __name__)
 
-# Redirect root route to the login page
-@auth.route("/")
-def home():
-    return redirect(url_for('auth.login'))
-
-# Handle user login form submission and authentication
-@auth.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        # get the form data
-        email = request.form['email']
-        password = request.form['password']
-        # look for user in database
-        user = User.query.filter_by(email=email).first()
-        # check to see if user and password match
-        if user and bcrypt.check_password_hash(user.password, password):
-            login_user(user)
-            # log in user and store their info
-            return redirect(url_for("main.resources"))
-            # return redirect(url_for("main.index"))
-        else:
-            flash("Login Unsuccessful. Please check email and password.")
-    return render_template("login.html")
-
-# Handle user registration for creating a new account
-@auth.route("/signup", methods=['GET', 'POST'])
+# -----------------------
+# Signup route (JSON API)
+# -----------------------
+@auth.route("/signup", methods=['POST'])
 def signup():
-    if request.method == "POST":
-        email = request.form.get("email")
-        password = bcrypt.generate_password_hash(request.form.get("password")).decode("utf-8")
-        # check if username already exists
-        if User.query.filter_by(email=email).first():
-            flash("Username already exists", "warning")
-        else:
-            new_user = User(email=email, password=password)
-            # add the new user to the database
-            db.session.add(new_user)
-            db.session.commit()
-            flash("Account created successfully", "success")
-            # redirect to login page after successful signup
-            return redirect(url_for("auth.login"))
-    return render_template("signup.html")
+    data = request.get_json()  # get JSON data from React
+    email = data.get("email")
+    password = data.get("password")
 
-# Protected page only visible to logged-in user, if they are not logging in they cannot see page
+    if not email or not password:
+        return jsonify({"success": False, "message": "Email and password required"}), 400
+
+    # check if user already exists
+    if User.query.filter_by(email=email).first():
+        return jsonify({"success": False, "message": "Email already exists"}), 400
+
+    hashed_pw = bcrypt.generate_password_hash(password).decode("utf-8")
+    new_user = User(email=email, password=hashed_pw)
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({"success": True, "message": "Account created successfully"})
+
+
+# -----------------------
+# Login route (JSON API)
+# -----------------------
+@auth.route("/login", methods=['POST'])
+def login():
+    data = request.get_json()  # get JSON data from React
+    email = data.get("email")
+    password = data.get("password")
+
+    if not email or not password:
+        return jsonify({"success": False, "message": "Email and password required"}), 400
+
+    user = User.query.filter_by(email=email).first()
+
+    if user and bcrypt.check_password_hash(user.password, password):
+        login_user(user)
+        return jsonify({"success": True, "message": "Login successful"})
+    else:
+        return jsonify({"success": False, "message": "Invalid credentials"}), 401
+
+
+# -----------------------
+# Protected dashboard
+# -----------------------
 @auth.route("/dashboard")
 @login_required
 def dashboard():
-    return render_template("dashboard.html", user=current_user)
+    return jsonify({"success": True, "user": {"email": current_user.email}})
 
-# Log out the current user and end their session
+
+# -----------------------
+# Logout route
+# -----------------------
 @auth.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("auth.login"))
+    return jsonify({"success": True, "message": "Logged out"})
