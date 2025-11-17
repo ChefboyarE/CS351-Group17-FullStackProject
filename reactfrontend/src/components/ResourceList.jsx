@@ -49,7 +49,7 @@ function ResourceList() {
       const formData = new URLSearchParams();
       formData.append("query", query);
 
-      const res = await fetch("http://127.0.0.1:5000/api/search", {
+      const res = await fetch("http://127.0.0.1:5000/search", {
         method: "POST",
         body: formData,
       });
@@ -73,7 +73,7 @@ function ResourceList() {
     }
 
     try {
-      const res = await fetch(`http://127.0.0.1:5000/api/suggest?query=${encodeURIComponent(value)}`);
+      const res = await fetch(`http://127.0.0.1:5000/suggest?query=${encodeURIComponent(value)}`);
       const data = await res.json();
       setSuggestions(data); // show autocomplete suggestions
     } catch (err) {
