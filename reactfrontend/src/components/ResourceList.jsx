@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import "./ResourceList.css";
+import {useAuth} from './AuthProvider'
+import {useNavigate} from 'react-router-dom'
 
 function ResourceList() {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [result, setResult] = useState("");
+  const {logout} = useAuth(); // get logout from context
+  const navigate = useNavigate();
 
   const resources = [
     {
@@ -29,6 +33,12 @@ function ResourceList() {
       description: "Resume workshops and job fairs."
     }
   ];
+
+  // handle logoutButton
+  const handleLogoutClick = () => {
+    logout();
+    navigate('/');
+  }
 
   // Handle form submit to search
   const handleSearch = async (e) => {
@@ -119,6 +129,11 @@ function ResourceList() {
           </li>
         ))}
       </ul>
+      
+      <button onClick={handleLogoutClick}>
+        Logout
+      </button>
+
     </div>
   );
 }

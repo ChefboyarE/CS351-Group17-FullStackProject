@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Login.css";
+import {useAuth} from './AuthProvider';
 
-function Login({ onLogin }) {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const {login} = useAuth(); //get login from context
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,7 +21,8 @@ function Login({ onLogin }) {
 
       const data = await res.json();
       if (data.success) {
-        onLogin(); // trigger redirect in App.jsx
+        login(); //pass data returned by Flask
+        // onLogin(); // trigger redirect in App.jsx
       } else {
         alert("Invalid login");
       }

@@ -149,3 +149,16 @@ input:focus {
   color: #fff;
   margin-top: 10px;
 }
+
+.resource-container button {
+    width: 50%;
+    padding: 15px;
+    background: linear-gradient(135deg, #C40233 30%, #ee4848 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
