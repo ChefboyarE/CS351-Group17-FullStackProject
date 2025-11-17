@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ResourceList.css";
 import {useAuth} from './AuthProvider'
 import {useNavigate} from 'react-router-dom'
@@ -9,6 +9,35 @@ function ResourceList() {
   const [result, setResult] = useState("");
   const {logout} = useAuth(); // get logout from context
   const navigate = useNavigate();
+  const [resourcesList, setResourcesList] = useState([]);
+
+  // useEffect to refresh/update the page
+  useEffect(() => {
+    // Mount Logic (runs when page is navigated to)
+
+    const fetchData = async () => {
+      try {
+        const result = await fetch('http://127.0.0.1:5000/getResources');
+        const data = await result.json();
+        setResourcesList(data);
+      } catch (err) {
+        console.error("error when fetching resources during mount")
+      }
+    };
+
+    fetchData();
+
+
+    return () => {
+      // optional: unmount logic (runs when page is navigated away)
+
+    };
+  }, []);
+
+  // update page when button is clicked
+  const handleButtonClick = () => {
+    
+  };
 
   const resources = [
     {
@@ -52,6 +81,7 @@ function ResourceList() {
       const res = await fetch("http://127.0.0.1:5000/search", {
         method: "POST",
         body: formData,
+        request: "search",
       });
 
       const data = await res.json();
@@ -118,7 +148,7 @@ function ResourceList() {
       {result && <p id="result">{result}</p>}
 
       <ul className="resource-list">
-        {resources.map((res, idx) => (
+        {resourcesList.map((res, idx) => (
           <li key={idx} className="resource-item">
             <img src={res.img} alt="UIC logo" />
             <div className="resource-details">

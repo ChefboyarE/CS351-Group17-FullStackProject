@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, jsonify, redirect, url_fo
 from backend.trie import Trie
 from backend.models import Event
 from backend import db
+from backend.models import Event # used to fetch Event data
 
 # Create a Blueprint for the landing page
 main = Blueprint('main', __name__)
@@ -16,22 +17,6 @@ for word in sample_words:
 def resources():
     return render_template("resourceList.html")
 
-# route for event submissions
-@main.route("/resourceSubmission", methods=["POST", "GET"])
-def resourceSubmission():
-    if request.method == "POST":
-        title = request.form['title']
-        date = request.form['date']
-        location = request.form['location']
-        description = request.form['description']
-        # add event to the databbase
-        new_event = Event(title=title, date=date, location=location, description=description)
-        db.session.add(new_event)
-        db.session.commit()
-        # redirect back to resources page
-        return redirect(url_for("main.resources"))
-    return render_template("resourceSubmission.html")
-
 @main.route("/index")
 def index():
     return render_template("index.html")
@@ -44,6 +29,23 @@ def search():
         return jsonify({"result": f"'{query}' exists in Trie!"})
     else:
         return jsonify({"result": f"'{query}' NOT found in Trie."})
+
+# helper function to convert entry to dictionary
+def entry_to_dict(entry):
+    return {
+        'img': entry.img,
+        'title': entry.title,
+        'date': entry.date,
+        'location': entry.location,
+        'description': entry.description,
+    }
+
+# route to fetch resources from database    
+@main.route("/getResources", methods=["GET"])
+def getResources():
+    events = Event.query.all()
+    resourceList = [entry_to_dict(entry) for entry in events]
+    return jsonify(resourceList)
 
 @main.route("/suggest", methods=["GET"])
 def suggest():

@@ -20,6 +20,7 @@ class User(db.Model, UserMixin):
 # Event model  for storing events
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    img = db.Column(db.Text, nullable=False)
     title = db.Column(db.String(150), nullable=False)
     date = db.Column(db.String(20), nullable=False)
     location = db.Column(db.String(100), nullable=False)

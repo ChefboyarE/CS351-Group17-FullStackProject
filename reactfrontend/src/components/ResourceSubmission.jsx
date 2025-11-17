@@ -3,6 +3,7 @@ import "./ResourceSubmission.css";
 
 function Submission({onLogin}) {
     // entries: title, date, location, description
+    const [img, setImage] = useState("https://shop.undergroundshirts.com/cdn/shop/files/UIC-1021_1001072_18500_Navy_2.jpg?v=1751390090");
     const [title, setTitle] = useState("");
     const [date, setDate] = useState("");
     const [location, setLocation] = useState("");
@@ -16,7 +17,7 @@ function Submission({onLogin}) {
             const res = await fetch("http://127.0.0.1:5000/resourceSubmission", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({title, date, location, description}),
+                body: JSON.stringify({img, title, date, location, description}),
             });
 
             const data = await res.json();

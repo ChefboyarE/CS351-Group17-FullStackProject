@@ -79,16 +79,17 @@ def logout():
 @auth.route("/resourceSubmission", methods=["POST"])
 def resourceSubmission():
     data = request.get_json() # get JSON data from React
+    img = data.get("img")
     title = data.get("title")
     date = data.get("date")
     location = data.get("location")
     description = data.get("description")
     
-    if not data or not title or not date or not location or not description:
+    if not data or not img or not title or not date or not location or not description:
         return jsonify({"success": False, "message": "One or more fields are missing"}), 400
 
     # add event to the databbase
-    new_event = Event(title=title, date=date, location=location, description=description)
+    new_event = Event(img=img, title=title, date=date, location=location, description=description)
     db.session.add(new_event)
     db.session.commit()
     # redirect back to resources page
