@@ -1,171 +1,151 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import "./ResourceList.css";
-import {useAuth} from './AuthProvider'
-import {useNavigate} from 'react-router-dom'
+import {useAuth} from './AuthProvider';
+import {useNavigate} from 'react-router-dom';
 
 function ResourceList() {
-  const [query, setQuery] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const [result, setResult] = useState("");
-  const {logout} = useAuth(); // get logout from context
-  const navigate = useNavigate();
-  const [resourcesList, setResourcesList] = useState([]);
+    const [query, setQuery] = useState("");
+    const [suggestions, setSuggestions] = useState([]);
+    const [result, setResult] = useState("");
+    const {logout} = useAuth();
+    const navigate = useNavigate();
 
-  // useEffect to refresh/update the page
-  useEffect(() => {
-    // Mount Logic (runs when page is navigated to)
+    const [resourcesList, setResourcesList] = useState([]);
+    const [filteredResources, setFilteredResources] = useState([]);
 
-    const fetchData = async () => {
-      try {
-        const result = await fetch('http://127.0.0.1:5000/getResources');
-        const data = await result.json();
-        setResourcesList(data);
-      } catch (err) {
-        console.error("error when fetching resources during mount")
-      }
+    // Load database resources on mount
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const result = await fetch('http://127.0.0.1:5000/getResources');
+                const data = await result.json();
+                setResourcesList(data);
+                setFilteredResources(data);
+            } catch (err) {
+                console.error("Error fetching resources:", err);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    // Logout
+    const handleLogoutClick = () => {
+        logout();
+        navigate('/login');
     };
 
-    fetchData();
+    // ----- SEARCH -----
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        if (!query) return;
 
+        try {
+            const formData = new URLSearchParams();
+            formData.append("query", query);
 
-    return () => {
-      // optional: unmount logic (runs when page is navigated away)
+            const res = await fetch("http://127.0.0.1:5000/search", {
+                method: "POST",
+                body: formData,
+            });
 
+            const data = await res.json();
+            setResult(data.result);
+
+            if (data.matches && data.matches.length > 0) {
+                setFilteredResources(data.matches);
+            } else {
+                setFilteredResources([]);
+            }
+
+            setSuggestions([]);
+        } catch (err) {
+            console.error("Search error:", err);
+        }
     };
-  }, []);
 
-  // update page when button is clicked
-  const handleButtonClick = () => {
-    
-  };
+    // ----- AUTOCOMPLETE -----
+    const handleInputChange = async (e) => {
+        const value = e.target.value;
+        setQuery(value);
 
-  const resources = [
-    {
-      img: "https://shop.undergroundshirts.com/cdn/shop/files/UIC-1021_1001072_18500_Navy_2.jpg?v=1751390090",
-      title: "Library Services",
-      date: "Oct 25, 2025",
-      location: "UIC Library",
-      description: "Access books, journals, and study spaces."
-    },
-    {
-      img: "https://shop.undergroundshirts.com/cdn/shop/files/UIC-1021_1001072_18500_Navy_2.jpg?v=1751390090",
-      title: "Student Counseling",
-      date: "Oct 26, 2025",
-      location: "SSB 1200",
-      description: "Free mental health support for students."
-    },
-    {
-      img: "https://shop.undergroundshirts.com/cdn/shop/files/UIC-1021_1001072_18500_Navy_2.jpg?v=1751390090",
-      title: "Career Center",
-      date: "Oct 27, 2025",
-      location: "SCE 200",
-      description: "Resume workshops and job fairs."
-    }
-  ];
+        if (!value) {
+            setSuggestions([]);
+            setFilteredResources(resourcesList);
+            return;
+        }
 
-  // handle logoutButton
-  const handleLogoutClick = () => {
-    logout();
-    navigate('/');
-  }
+        try {
+            const res = await fetch(
+                `http://127.0.0.1:5000/suggest?query=${encodeURIComponent(value)}`
+            );
+            const data = await res.json();
+            setSuggestions(data);
+        } catch (err) {
+            console.error("Autocomplete error:", err);
+        }
+    };
 
-  // Handle form submit to search
-  const handleSearch = async (e) => {
-    e.preventDefault();
-    if (!query) return;
+    const handleSuggestionClick = (s) => {
+        setQuery(s);
+        setSuggestions([]);
+    };
 
-    try {
-      const formData = new URLSearchParams();
-      formData.append("query", query);
+    return (
+        <>
+            {/* Top-right logout button */}
+            <button className="logout-btn" onClick={handleLogoutClick}>
+                Logout
+            </button>
 
-      const res = await fetch("http://127.0.0.1:5000/search", {
-        method: "POST",
-        body: formData,
-        request: "search",
-      });
+            <div className="resource-container">
+                <a href="/resourceSubmission" className="submit-btn">+</a>
+                <h1>UIC Resources</h1>
 
-      const data = await res.json();
-      setResult(data.message); // show the search result
-      setSuggestions([]);
-    } catch (err) {
-      console.error("Search error:", err);
-    }
-  };
+                <form onSubmit={handleSearch}>
+                    <div className="search-container">
+                        <input
+                            type="text"
+                            placeholder="Search resources"
+                            value={query}
+                            onChange={handleInputChange}
+                        />
 
-  // Handle typing in search input for autocomplete
-  const handleInputChange = async (e) => {
-    const value = e.target.value;
-    setQuery(value);
+                        <button className="search-btn" type="submit">
+                            Search
+                        </button>
 
-    if (!value) {
-      setSuggestions([]);
-      return;
-    }
+                        <div id="suggestions">
+                            {suggestions.map((s, idx) => (
+                                <div
+                                    key={idx}
+                                    className="suggestion-item"
+                                    onClick={() => handleSuggestionClick(s)}
+                                >
+                                    {s}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </form>
 
-    try {
-      const res = await fetch(`http://127.0.0.1:5000/suggest?query=${encodeURIComponent(value)}`);
-      const data = await res.json();
-      setSuggestions(data); // show autocomplete suggestions
-    } catch (err) {
-      console.error("Autocomplete error:", err);
-    }
-  };
+                {result && <p id="result">{result}</p>}
 
-  // When clicking on a suggestion
-  const handleSuggestionClick = (s) => {
-    setQuery(s);
-    setSuggestions([]);
-  };
-
-  return (
-    <div className="resource-container">
-      <a href="/resourceSubmission" className="submit-btn">+</a>
-      <h1>UIC Resources</h1>
-
-      <form onSubmit={handleSearch}>
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search resources"
-            value={query}
-            onChange={handleInputChange}
-          />
-          <span className="filter-btn">Filter</span>
-          <div id="suggestions">
-            {suggestions.map((s, idx) => (
-              <div
-                key={idx}
-                className="suggestion-item"
-                onClick={() => handleSuggestionClick(s)}
-              >
-                {s}
-              </div>
-            ))}
-          </div>
-        </div>
-      </form>
-
-      {result && <p id="result">{result}</p>}
-
-      <ul className="resource-list">
-        {resourcesList.map((res, idx) => (
-          <li key={idx} className="resource-item">
-            <img src={res.img} alt="UIC logo" />
-            <div className="resource-details">
-              <h3>{res.title}</h3>
-              <p>{res.date} | {res.location}</p>
-              <p className="description">{res.description}</p>
+                <ul className="resource-list">
+                    {filteredResources.map((res, idx) => (
+                        <li key={idx} className="resource-item">
+                            <img src={res.img} alt="resource"/>
+                            <div className="resource-details">
+                                <h3>{res.title}</h3>
+                                <p>{res.date} | {res.location}</p>
+                                <p className="description">{res.description}</p>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
             </div>
-          </li>
-        ))}
-      </ul>
-      
-      <button onClick={handleLogoutClick}>
-        Logout
-      </button>
-
-    </div>
-  );
+        </>
+    );
 }
 
 export default ResourceList;

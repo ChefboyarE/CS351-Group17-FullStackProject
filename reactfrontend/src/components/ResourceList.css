@@ -56,7 +56,7 @@ input {
   width: 100%;
   padding: 15px 20px;
   border: 2px solid #ddd;
-  border-radius: 12px 0 0 12px;
+  border-radius: 12px;
   font-size: 16px;
   background: #f8f9fa;
   text-align: center;
@@ -67,17 +67,6 @@ input:focus {
   border-color: #C40233;
   background: white;
   box-shadow: 0 0 0 3px rgba(196,2,51,0.1);
-}
-
-.filter-btn {
-  padding: 15px;
-  background: #f8f9fa;
-  border: 2px solid #ddd;
-  border-left: none;
-  border-radius: 0 12px 12px 0;
-  font-size: 16px;
-  color: #333;
-  cursor: pointer;
 }
 
 #suggestions {
@@ -161,4 +150,25 @@ input:focus {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+}
+
+.logout-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #C40233 30%, #ee4848 100%);
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+    z-index: 1000; /* ensures it stays above card */
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(196,2,51,0.4);
 }

@@ -24,11 +24,38 @@ def index():
 # Example search route for your search bar
 @main.route("/search", methods=["POST"])
 def search():
-    query = request.form.get("query", "")
-    if trie.search(query):
-        return jsonify({"result": f"'{query}' exists in Trie!"})
+    query = request.form.get("query", "").strip().lower()
+
+    if not query:
+        return jsonify({"result": "No query provided", "matches": []})
+
+    # Search events by title OR location
+    matches = Event.query.filter(
+        (Event.title.ilike(f"%{query}%")) |
+        (Event.location.ilike(f"%{query}%"))
+    ).all()
+
+    results = [
+        {
+            "img": e.img,
+            "title": e.title,
+            "date": e.date,
+            "location": e.location,
+            "description": e.description
+        }
+        for e in matches
+    ]
+
+    # Message text for display
+    if matches:
+        result_text = f"Found {len(matches)} matching events."
     else:
-        return jsonify({"result": f"'{query}' NOT found in Trie."})
+        result_text = "No matching events found."
+
+    return jsonify({
+        "result": result_text,
+        "matches": results
+    })
 
 # helper function to convert entry to dictionary
 def entry_to_dict(entry):
@@ -52,25 +79,27 @@ def suggest():
     query = request.args.get("query", "").lower()
     suggestions = []
 
-    # Simple Trie traversal to get suggestions
-    def dfs(node, prefix):
-        if len(suggestions) >= 5:  # limit to top 5 suggestions
-            return
-        if node.is_word:
-            suggestions.append(prefix)
-        for char in node.children:
-            dfs(node.children[char], prefix + char)
+    if not query:
+        return jsonify([])
 
-    # Traverse Trie from query prefix
-    node = trie.root
-    for char in query:
-        if char in node.children:
-            node = node.children[char]
-        else:
-            node = None
+    events = Event.query.all()
+
+    # Collect unique suggestions from title + location
+    seen = set()
+
+    for e in events:
+        fields = [e.title, e.location]
+        for field in fields:
+            field_low = field.lower()
+            if query in field_low:
+                if field not in seen:
+                    suggestions.append(field)
+                    seen.add(field)
+
+            # Stop at 5 suggestions max
+            if len(suggestions) >= 5:
+                break
+        if len(suggestions) >= 5:
             break
-
-    if node:
-        dfs(node, query)
 
     return jsonify(suggestions)
