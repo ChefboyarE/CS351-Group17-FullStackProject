@@ -79,18 +79,28 @@ def logout():
 @auth.route("/resourceSubmission", methods=["POST"])
 def resourceSubmission():
     data = request.get_json() # get JSON data from React
-    img = data.get("img")
-    title = data.get("title")
-    date = data.get("date")
-    location = data.get("location")
-    description = data.get("description")
+    img = data.get("img").strip()
+    title = data.get("title").strip().lower()
+    date = data.get("date").strip()
+    location = data.get("location").strip().lower()
+    description = data.get("description").strip()
     
     if not data or not img or not title or not date or not location or not description:
         return jsonify({"success": False, "message": "One or more fields are missing"}), 400
 
-    # add event to the databbase
-    new_event = Event(img=img, title=title, date=date, location=location, description=description)
-    db.session.add(new_event)
-    db.session.commit()
-    # redirect back to resources page
-    return jsonify({"success": True, "message": "Event added successfully"})
+    # Check for duplicate event with same Title and Date
+    existing_event = Event.query.filter_by(title=title, date=date).first()
+    if existing_event:
+        return jsonify({"success": False, "message": "Event already exists"}), 400
+
+    try:
+        # add event to the databbase
+        new_event = Event(img=img, title=title, date=date, location=location, description=description)
+        db.session.add(new_event)
+        db.session.commit()
+        # redirect back to resources page
+        return jsonify({"success": True, "message": "Event added successfully"})
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"success": False, "message": "Duplicate event not allowed"}), 400

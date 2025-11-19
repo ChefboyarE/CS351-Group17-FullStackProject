@@ -1,5 +1,6 @@
 import {useState} from "react";
 import "./ResourceSubmission.css";
+import {useNavigate} from "react-router-dom";
 
 function Submission({onLogin}) {
     // entries: title, date, location, description
@@ -8,6 +9,7 @@ function Submission({onLogin}) {
     const [date, setDate] = useState("");
     const [location, setLocation] = useState("");
     const [description, setDescription] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -23,6 +25,7 @@ function Submission({onLogin}) {
             const data = await res.json();
             if (data.success) {
                 alert("Event submitted!");
+                navigate("/resources");
             } else alert(data.message);
 
         } catch (err) {
