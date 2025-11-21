@@ -83,7 +83,7 @@
   box-shadow: 0 0 0 3px rgba(196, 2, 51, 0.15);
 }
 
-/* Better textarea appearance */
+/* Textarea size */
 .submission-form textarea {
   resize: vertical;
   min-height: 90px;

@@ -2,26 +2,35 @@ import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "./ResourceSubmission.css";
 
+// Default fallback image
+const DEFAULT_IMAGE =
+  "https://shop.undergroundshirts.com/cdn/shop/files/UIC-1021_1001072_18500_Navy_2.jpg?v=1751390090";
+
+// Helper to get today's date in local format
+const getLocalToday = () => {
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().split("T")[0];
+};
+
 function ResourceSubmission() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
 
-  // If "?id=123" is present → edit mode
+  // If "?id=123" is present → edit mode enabled
   const resourceId = params.get("id");
   const isEdit = Boolean(resourceId);
 
-  const [img, setImage] = useState(
-    "https://shop.undergroundshirts.com/cdn/shop/files/UIC-1021_1001072_18500_Navy_2.jpg?v=1751390090"
-  );
+  const [img, setImage] = useState(DEFAULT_IMAGE);
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
 
-  // Prevent double-submit
+  // Prevent double submits
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Load existing event in EDIT mode
+  // Load existing event (edit mode)
   useEffect(() => {
     if (!isEdit) return;
 
@@ -37,7 +46,7 @@ function ResourceSubmission() {
           setDate(data.date || "");
           setLocation(data.location || "");
           setDescription(data.description || "");
-          setImage(data.img || "");
+          setImage(data.img || DEFAULT_IMAGE);
         }
       } catch (err) {
         console.error("Error loading event:", err);
@@ -47,7 +56,7 @@ function ResourceSubmission() {
     loadEvent();
   }, [isEdit, resourceId]);
 
-  // Submit handler for BOTH create & edit
+  // Submit handler for BOTH create + edit
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
@@ -70,17 +79,24 @@ function ResourceSubmission() {
       const res = await fetch(route, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ img, title, date, location, description }),
+        body: JSON.stringify({
+          img,
+          title,
+          date,
+          location,
+          description,
+        }),
       });
 
       const data = await res.json();
 
       if (data.success) {
         alert(isEdit ? "Event updated!" : "Event submitted!");
-        navigate("/resources"); // ✅ redirect after submit
+        navigate("/resources"); // redirect after submit
       } else {
         alert(data.message || "Submission failed.");
       }
+
     } catch (err) {
       console.error("Submission error:", err);
       alert("Error submitting event");
@@ -91,6 +107,7 @@ function ResourceSubmission() {
 
   return (
     <div className="submission-page">
+      {/* Back button */}
       <button
         className="back-btn"
         onClick={() => navigate("/resources")}
@@ -121,8 +138,8 @@ function ResourceSubmission() {
             <input
               type="date"
               value={date}
+              min={getLocalToday()}
               onChange={(e) => setDate(e.target.value)}
-              max="9999-12-31"
               required
             />
           </label>
@@ -162,7 +179,12 @@ function ResourceSubmission() {
             />
           </label>
 
-          <button className="submit-btn" type="submit" disabled={isSubmitting}>
+          {/* SUBMIT */}
+          <button
+            className="submit-btn"
+            type="submit"
+            disabled={isSubmitting}
+          >
             {isEdit
               ? isSubmitting
                 ? "Updating..."

@@ -1,6 +1,7 @@
 """
 Define our database for the app
 """
+from sqlalchemy import UniqueConstraint
 from sqlalchemy.testing.pickleable import User
 
 from backend import db, login_manager
@@ -24,4 +25,7 @@ class Event(db.Model):
     title = db.Column(db.String(150), nullable=False)
     date = db.Column(db.String(20), nullable=False)
     location = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text, nullable=True)
+    description = db.Column(db.Text, nullable=False)
+
+    # To prevent duplicates in the table
+    __table_args__ = (UniqueConstraint('title', 'date', name='unique_title_date'),)
