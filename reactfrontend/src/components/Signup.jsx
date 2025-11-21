@@ -43,6 +43,9 @@ function Signup() {
         <button type="submit">Sign Up</button>
       </form>
       <p>Already have an account? <Link to="/login">Login</Link></p>
+      <p style={{ marginTop: "4px", fontSize: "13px" }}>
+        ← Back to <Link to="/">Home</Link>
+      </p>
     </div>
   );
 }

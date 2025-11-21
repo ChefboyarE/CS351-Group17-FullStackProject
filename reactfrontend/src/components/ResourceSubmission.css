@@ -1,91 +1,134 @@
-/* ResourceSubmission.css */
+/* ------------------ Page Layout ------------------ */
 
-body {
-    min-height: 100vh;
-    background: radial-gradient(circle, #C40233 0%, #3eb9ea 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: Arial, sans-serif;
+.submission-page {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* ------------------ Back Button ------------------ */
+
+.back-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #C40233;
+  cursor: pointer;
+  margin-bottom: 15px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.back-btn:hover {
+  transform: translateX(-4px);
+}
+
+/* ------------------ Card Container ------------------ */
+
+.submission-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.submission-card h1 {
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+/* ------------------ Form Styling ------------------ */
+
+.submission-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.submission-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Character count for title */
+.char-count {
+  font-size: 12px;
+  color: #666;
+  font-weight: normal;
+  margin-left: auto;
+}
+
+/* Inputs & textarea */
+.submission-form input,
+.submission-form textarea {
+  margin-top: 6px;
+  padding: 14px;
+  font-size: 15px;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  background: #f8f9fa;
+  transition: 0.2s ease;
+}
+
+.submission-form input:focus,
+.submission-form textarea:focus {
+  border-color: #C40233;
+  background: white;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(196, 2, 51, 0.15);
+}
+
+/* Better textarea appearance */
+.submission-form textarea {
+  resize: vertical;
+  min-height: 90px;
+  max-height: 250px;
+}
+
+/* ------------------ Submit Button ------------------ */
+
+.submit-btn {
+  margin-top: 10px;
+  padding: 14px;
+  background: linear-gradient(135deg, #C40233 30%, #ee4848 100%);
+  color: white;
+  font-size: 17px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(196,2,51,0.4);
+}
+
+.submit-btn:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+/* ------------------ Responsive Adjustments ------------------ */
+
+@media (max-width: 600px) {
+  .submission-card {
     padding: 20px;
-}
+  }
 
-.resourceSub-container {
-    background: darkred;
-    padding: 40px;
-    border-radius: 30px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
-
-.resourceSub-container h1 {
-    color: #29c8e0;
-    margin-bottom: 30px;
-    font-size: 2.2em;
-}
-
-.resourceSub-container input {
-    width: 100%;
-    padding: 15px 20px;
-    margin-bottom: 20px;
-    border: 2px solid #ddd;
-    border-radius: 12px;
-    font-size: 16px;
-    background: #f8f9fa;
-    text-align: center;
-}
-
-.resourceSub-container input:focus {
-    outline: none;
-    border-color: #C40233;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(196,2,51,0.1);
-}
-
-.resourceSub-container button {
-    width: 50%;
-    padding: 15px;
-    background: linear-gradient(135deg, #C40233 30%, #ee4848 100%);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.resourceSub-container button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(196,2,51,0.4);
-}
-
-.resourceSub-container p {
-    margin-top: 15px;
-    color: #fff;
+  .submission-form input,
+  .submission-form textarea {
     font-size: 14px;
-}
+    padding: 12px;
+  }
 
-.resourceSub-container a {
-    color: #29c8e0;
-    text-decoration: none;
-}
-
-.resourceSub-container a:hover {
-    text-decoration: underline;
-}
-
-.resourceSub-container button {
-    width: 50%;
-    padding: 15px;
-    background: linear-gradient(135deg, #C40233 30%, #ee4848 100%);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  .submit-btn {
+    font-size: 16px;
+  }
 }

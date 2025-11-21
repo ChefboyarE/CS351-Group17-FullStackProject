@@ -55,6 +55,9 @@ function Login() {
       <p>
         No account? <Link to="/signup">Sign up</Link>
       </p>
+      <p style={{ marginTop: "4px", fontSize: "13px" }}>
+        ← Back to <Link to="/">Home</Link>
+      </p>
     </div>
   );
 }

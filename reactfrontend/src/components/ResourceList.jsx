@@ -1,151 +1,207 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import "./ResourceList.css";
-import {useAuth} from './AuthProvider';
-import {useNavigate} from 'react-router-dom';
+import { useAuth } from "./AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 function ResourceList() {
-    const [query, setQuery] = useState("");
-    const [suggestions, setSuggestions] = useState([]);
-    const [result, setResult] = useState("");
-    const {logout} = useAuth();
-    const navigate = useNavigate();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
-    const [resourcesList, setResourcesList] = useState([]);
-    const [filteredResources, setFilteredResources] = useState([]);
+  const [query, setQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [result, setResult] = useState("");
 
-    // Load database resources on mount
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const result = await fetch('http://127.0.0.1:5000/getResources');
-                const data = await result.json();
-                setResourcesList(data);
-                setFilteredResources(data);
-            } catch (err) {
-                console.error("Error fetching resources:", err);
-            }
-        };
+  const [resourcesList, setResourcesList] = useState([]);
+  const [filteredResources, setFilteredResources] = useState([]);
 
-        fetchData();
-    }, []);
+  // Load initial resources
+  useEffect(() => {
+    async function fetchResources() {
+      try {
+        const res = await fetch("http://127.0.0.1:5000/getResources");
+        const data = await res.json();
+        setResourcesList(data);
+        setFilteredResources(data);
+      } catch (err) {
+        console.error("Error fetching resources:", err);
+      }
+    }
 
-    // Logout
-    const handleLogoutClick = () => {
-        logout();
-        navigate('/login');
-    };
+    fetchResources();
+  }, []);
 
-    // ----- SEARCH -----
-    const handleSearch = async (e) => {
-        e.preventDefault();
-        if (!query) return;
+  // Logout handler
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
-        try {
-            const formData = new URLSearchParams();
-            formData.append("query", query);
+  // Search handler
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (!query.trim()) return;
 
-            const res = await fetch("http://127.0.0.1:5000/search", {
-                method: "POST",
-                body: formData,
-            });
+    try {
+      const formData = new URLSearchParams();
+      formData.append("query", query);
 
-            const data = await res.json();
-            setResult(data.result);
+      const res = await fetch("http://127.0.0.1:5000/search", {
+        method: "POST",
+        body: formData,
+      });
 
-            if (data.matches && data.matches.length > 0) {
-                setFilteredResources(data.matches);
-            } else {
-                setFilteredResources([]);
-            }
+      const data = await res.json();
+      setResult(data.result || "");
 
-            setSuggestions([]);
-        } catch (err) {
-            console.error("Search error:", err);
-        }
-    };
+      if (data.matches?.length > 0) {
+        setFilteredResources(data.matches);
+      } else {
+        setFilteredResources([]);
+      }
 
-    // ----- AUTOCOMPLETE -----
-    const handleInputChange = async (e) => {
-        const value = e.target.value;
-        setQuery(value);
+      setSuggestions([]);
+    } catch (err) {
+      console.error("Search error:", err);
+    }
+  };
 
-        if (!value) {
-            setSuggestions([]);
-            setFilteredResources(resourcesList);
-            return;
-        }
+  // Input change → suggestions
+  const handleInputChange = async (e) => {
+    const value = e.target.value;
+    setQuery(value);
 
-        try {
-            const res = await fetch(
-                `http://127.0.0.1:5000/suggest?query=${encodeURIComponent(value)}`
-            );
-            const data = await res.json();
-            setSuggestions(data);
-        } catch (err) {
-            console.error("Autocomplete error:", err);
-        }
-    };
+    if (!value.trim()) {
+      setFilteredResources(resourcesList);
+      setSuggestions([]);
+      return;
+    }
 
-    const handleSuggestionClick = (s) => {
-        setQuery(s);
-        setSuggestions([]);
-    };
+    try {
+      const res = await fetch(
+        `http://127.0.0.1:5000/suggest?query=${encodeURIComponent(value)}`
+      );
+      const data = await res.json();
+      setSuggestions(data);
+    } catch (err) {
+      console.error("Autocomplete error:", err);
+    }
+  };
 
-    return (
-        <>
-            {/* Top-right logout button */}
-            <button className="logout-btn" onClick={handleLogoutClick}>
-                Logout
-            </button>
+  const handleSuggestionClick = (s) => {
+    setQuery(s);
+    setSuggestions([]);
+  };
 
-            <div className="resource-container">
-                <a href="/resourceSubmission" className="submit-btn">+</a>
-                <h1>UIC Resources</h1>
+  // DELETE resource
+  const handleDelete = async (id) => {
+    const ok = window.confirm("Delete this event?");
+    if (!ok) return;
 
-                <form onSubmit={handleSearch}>
-                    <div className="search-container">
-                        <input
-                            type="text"
-                            placeholder="Search resources"
-                            value={query}
-                            onChange={handleInputChange}
-                        />
+    try {
+      const res = await fetch(`http://127.0.0.1:5000/deleteResource/${id}`, {
+        method: "DELETE",
+      });
 
-                        <button className="search-btn" type="submit">
-                            Search
-                        </button>
+      const data = await res.json();
+      if (data.success) {
+        setFilteredResources(filteredResources.filter((r) => r.id !== id));
+        setResourcesList(resourcesList.filter((r) => r.id !== id));
+      } else {
+        alert("Failed to delete.");
+      }
+    } catch (err) {
+      console.error("Delete error:", err);
+    }
+  };
 
-                        <div id="suggestions">
-                            {suggestions.map((s, idx) => (
-                                <div
-                                    key={idx}
-                                    className="suggestion-item"
-                                    onClick={() => handleSuggestionClick(s)}
-                                >
-                                    {s}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </form>
+  return (
+    <div className="page-wrapper">
 
-                {result && <p id="result">{result}</p>}
+      {/* Header */}
+      <header className="page-header">
+        <h1>UIC Resources</h1>
+        <button className="logout-btn" onClick={handleLogout}>
+          Logout
+        </button>
+      </header>
 
-                <ul className="resource-list">
-                    {filteredResources.map((res, idx) => (
-                        <li key={idx} className="resource-item">
-                            <img src={res.img} alt="resource"/>
-                            <div className="resource-details">
-                                <h3>{res.title}</h3>
-                                <p>{res.date} | {res.location}</p>
-                                <p className="description">{res.description}</p>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </>
-    );
+      {/* Main content box */}
+      <div className="resource-container">
+
+        {/* Create new event button */}
+        <a href="/resourceSubmission" className="submit-btn">
+          +
+        </a>
+
+        {/* Search Bar */}
+        <form onSubmit={handleSearch}>
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search resources"
+              value={query}
+              onChange={handleInputChange}
+            />
+
+            {/* Suggestions */}
+            {suggestions.length > 0 && (
+              <div id="suggestions">
+                {suggestions.map((s, idx) => (
+                  <div
+                    key={idx}
+                    className="suggestion-item"
+                    onClick={() => handleSuggestionClick(s)}
+                  >
+                    {s}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </form>
+
+        {result && <p id="result">{result}</p>}
+
+        {/* Scrollable List */}
+        <div className="resource-scroll">
+          <ul className="resource-list">
+            {filteredResources.map((res) => (
+              <li key={res.id} className="resource-item">
+                <img src={res.img} alt="resource" />
+
+                <div className="resource-details">
+                  <h3>{res.title}</h3>
+                  <p>{res.date} | {res.location}</p>
+                  <p className="description">{res.description}</p>
+
+                  {/* Edit + Delete buttons */}
+                  <div className="resource-actions">
+                    <button
+                      className="edit-btn"
+                      onClick={() =>
+                        navigate(`/resourceSubmission?id=${res.id}`)
+                      }
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      className="delete-btn"
+                      onClick={() => handleDelete(res.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  );
 }
 
 export default ResourceList;
