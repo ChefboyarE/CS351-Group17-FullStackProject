@@ -1,6 +1,6 @@
 # Run the Flask application
 from flask import Flask
-from backend import create_app
+from . import create_app
 from flask_cors import CORS
 
 # Create the Flask app using our create_app() function

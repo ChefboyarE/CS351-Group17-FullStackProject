@@ -1,74 +1,94 @@
+/* ------------------ Global Styles ------------------ */
 body {
   font-family: Arial, sans-serif;
+  background: #f0f2f5;
 }
 
+/* ------------- Page Layout Container -------------- */
+.page-wrapper {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.page-header h1 {
+  font-size: 2rem;
+  color: #333;
+}
+
+/* ------------------ Logout Button ------------------ */
+.logout-btn {
+  background: linear-gradient(135deg, #C40233 30%, #ee4848 100%);
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(196, 2, 51, 0.4);
+}
+
+/* ----------------- Submit Button (+) ---------------- */
 .submit-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 10px 15px;
   background: linear-gradient(135deg, #C40233 0%, #E06666 100%);
   color: white;
   border: none;
   border-radius: 50%;
-  font-size: 18px;
+  font-size: 28px;
   font-weight: 600;
   cursor: pointer;
-  text-decoration: none;
-  width: 40px;
-  height: 40px;
+  width: 55px;
+  height: 55px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: auto;
   transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .submit-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(196,2,51,0.4);
+  box-shadow: 0 10px 25px rgba(196, 2, 51, 0.4);
 }
 
-.resource-container {
-  background: darkred;
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-  width: 100%;
-  max-width: 600px;
-  margin: 60px auto 20px;
-  text-align: center;
-  position: relative;
-}
-
-h1 {
-  color: #87CEEB;
-  font-size: 2.2em;
-  margin-bottom: 20px;
-}
-
+/* ------------------ Search Bar ------------------ */
 .search-container {
-  display: flex;
-  align-items: center;
+  width: 100%;
   position: relative;
+  margin: 20px 0;
 }
 
-input {
+.search-container input {
   width: 100%;
   padding: 15px 20px;
-  border: 2px solid #ddd;
+  border: 2px solid #ccc;
   border-radius: 12px;
   font-size: 16px;
-  background: #f8f9fa;
-  text-align: center;
+  background: #ffffff;
 }
 
-input:focus {
+.search-container input:focus {
   outline: none;
   border-color: #C40233;
   background: white;
-  box-shadow: 0 0 0 3px rgba(196,2,51,0.1);
+  box-shadow: 0 0 0 3px rgba(196, 2, 51, 0.1);
 }
 
+/* ------------------- Suggestions Box ------------------ */
 #suggestions {
   position: absolute;
   top: 100%;
@@ -80,6 +100,8 @@ input:focus {
   max-height: 150px;
   overflow-y: auto;
   z-index: 100;
+  border-radius: 0 0 12px 12px;
+  padding-bottom: 5px;
 }
 
 .suggestion-item {
@@ -91,32 +113,70 @@ input:focus {
   background: #f0f0f0;
 }
 
-.resource-list {
-  max-height: 400px;
+/* ------------------ Resource Container ------------------ */
+.resource-container {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  text-align: left;
+  margin-top: 20px;
+}
+
+/* ------------------ Scroll Container ------------------ */
+.resource-scroll {
+  max-height: 55vh;
   overflow-y: auto;
+  padding-right: 12px; /* prevents scrollbar overlap */
+  margin-top: 20px;
+}
+
+.resource-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+.resource-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.3);
+  border-radius: 6px;
+}
+
+/* ------------------ Resource List Items ------------------ */
+.resource-list {
   list-style: none;
-  margin-bottom: 20px;
   padding: 0;
+  margin: 0;
 }
 
 .resource-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  gap: 15px;
   padding: 15px;
   border-bottom: 1px solid #ddd;
-  background: #f8f9fa;
-  border-radius: 8px;
-  margin-bottom: 10px;
+  background: #fafafa;
+  border-radius: 12px;
+  margin-bottom: 12px;
 }
 
+/* Prevent text breaking layout */
+.resource-details,
+.resource-details h3,
+.resource-details p,
+.description {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+/* ------------------ Resource Image ------------------ */
 .resource-item img {
   width: 60px;
   height: 60px;
   object-fit: cover;
   border-radius: 8px;
-  margin-right: 15px;
 }
 
+/* ------------------ Resource Text ------------------ */
 .resource-details h3 {
   color: #333;
   font-size: 18px;
@@ -126,67 +186,50 @@ input:focus {
 .resource-details p {
   color: #666;
   font-size: 14px;
-  margin-bottom: 5px;
+  margin: 5px 0;
 }
 
-.resource-details .description {
-  color: #999;
+.description {
+  color: #777;
   font-size: 13px;
 }
 
-#result {
-  color: #fff;
+/* ------------------ Edit / Delete Buttons ------------------ */
+.resource-actions {
   margin-top: 10px;
+  display: flex;
+  gap: 10px;
 }
 
-.resource-container button {
-    width: 50%;
-    padding: 15px;
-    background: linear-gradient(135deg, #C40233 30%, #ee4848 100%);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
+.edit-btn,
+.delete-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  color: white;
 }
 
-.logout-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: linear-gradient(135deg, #C40233 30%, #ee4848 100%);
-    color: white;
-    border: none;
-    padding: 12px 22px;
-    border-radius: 12px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s ease;
-    z-index: 1000; /* ensures it stays above card */
+.edit-btn {
+  background: #006aff;
 }
 
-.logout-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(196,2,51,0.4);
+.edit-btn:hover {
+  background: #0050d4;
 }
 
-.filter-dropdown {
-    width: 50%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border-radius: 12px;
-    border: 2px solid #ddd;
-    font-size: 16px;
-    background: #f8f9fa;
-    cursor: pointer;
-    text-align: center;
+.delete-btn {
+  background: #ff2d2d;
 }
 
-.past-event {
-  opacity: 1;
-  background: #DCDCDC !important;
-  filter: grayscale(100%);
+.delete-btn:hover {
+  background: #d20000;
+}
+
+/* ------------------ Search Result Message ------------------ */
+#result {
+  margin-top: 10px;
+  color: #333;
+  font-weight: 600;
 }

@@ -1,76 +1,46 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import ResourceList from "./components/ResourceList";
 import ResourceSubmission from "./components/ResourceSubmission";
 import { AuthProvider, useAuth } from "./components/AuthProvider";
+import Home from "./components/Home";
 
 const ProtectedRoute = () => {
-  const {isLoggedIn} = useAuth();
-
-  if (isLoggedIn) {
-    return <Outlet />;
-  }
-
-  return <Navigate to = "/login" replace />;
+  const { isLoggedIn } = useAuth();
+  return isLoggedIn ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 const UnauthenticatedRoute = () => {
-  const {isLoggedIn} = useAuth();
-  if (isLoggedIn) {
-    return <Navigate to= "/resources" replace />;
-  }
-
-  return <Outlet />;
-}
+  const { isLoggedIn } = useAuth();
+  return isLoggedIn ? <Navigate to="/resources" replace /> : <Outlet />;
+};
 
 function App() {
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // const handleLogin = () => {
-  //   // setIsLoggedIn(true); // set login status
-  // };
-
   return (
     <Router>
       <AuthProvider>
         <Routes>
-          {/* Routes that only unauthenticated could access */}
+
+          {/* PUBLIC HOME PAGE */}
+          <Route path="/" element={<Home />} />
+
+          {/* UNAUTH ROUTES */}
           <Route element={<UnauthenticatedRoute />}>
-            {/* Login route */}
-            <Route
-              path="/login"
-              element={<Login/>}
-            />
-
-            {/* Signup route */}
-            <Route
-              path="/signup"
-              element={<Signup />}
-            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
           </Route>
 
-          {/* Protected routes that can only be accessed when authenticated */}
+          {/* PROTECTED ROUTES */}
           <Route element={<ProtectedRoute />}>
-            {/* Protected resource list/dashboard */}
-            <Route
-              path="/resources"
-              element={<ResourceList/>}
-            />
-
-            {/* Protected resource submission page */}
-            <Route
-              path = "/resourceSubmission"
-              element={<ResourceSubmission />} 
-            />
-
-            {/* Default route */}
-            <Route
-              path="/"
-              element={<Navigate to="/login"/>}
-            />
+            <Route path="/resources" element={<ResourceList />} />
+            <Route path="/resourceSubmission" element={<ResourceSubmission />} />
+            <Route path="/resourceSubmission/:id" element={<ResourceSubmission />} />
           </Route>
+
+          {/* OPTIONAL: Catch-all for unknown routes */}
+          <Route path="*" element={<Navigate to="/" />} />
 
         </Routes>
       </AuthProvider>
