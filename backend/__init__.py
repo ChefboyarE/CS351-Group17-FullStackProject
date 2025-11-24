@@ -8,7 +8,6 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
-
 # Initialize the Flask extensions
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -50,5 +49,18 @@ def create_app():
     # instantiate sql table
     with app.app_context():
         db.create_all()
+
+    # Create tables and build bloom filters
+    with app.app_context():
+        db.create_all()
+        print("Database tables ensured.")
+
+        from backend.bloom_filters import build_filters
+        # Build Bloom Filters (no crash allowed)
+        try:
+            build_filters()
+            print("Bloom filters successfully built.")
+        except Exception as e:
+            print("Bloom filter initialization ERROR:", e)
 
     return app

@@ -3,6 +3,7 @@ from backend.trie import Trie
 from backend.models import Event
 from backend import db
 from backend.models import Event # used to fetch Event data
+from flask_login import login_required, current_user
 
 # Create a Blueprint for the landing page
 main = Blueprint('main', __name__)
@@ -37,11 +38,13 @@ def search():
 
     results = [
         {
+            "id": e.id,
             "img": e.img,
             "title": e.title,
             "date": e.date,
             "location": e.location,
-            "description": e.description
+            "description": e.description,
+            "isPast": dt_date.fromisoformat(e.date) < dt_date.today()
         }
         for e in matches
     ]
@@ -57,14 +60,57 @@ def search():
         "matches": results
     })
 
+from backend.bloom_filters import (
+    title_filter,
+    location_filter,
+    date_filter
+)
+
+@main.route("/filter", methods=["POST"])
+def filter_events():
+    data = request.get_json()
+    filter_type = data.get("filterType")
+
+    events = Event.query.all()
+
+    if filter_type == "title":
+        filtered = sorted(events, key=lambda e: e.title.lower())
+
+    elif filter_type == "location":
+        filtered = sorted(events, key=lambda e: e.location.lower())
+
+    elif filter_type == "date":
+        filtered = sorted(events, key=lambda e: e.date)
+
+    else:
+        filtered = events
+
+    results = [{
+        "id": e.id,
+        "img": e.img,
+        "title": e.title,
+        "date": e.date,
+        "location": e.location,
+        "description": e.description,
+        "isPast": dt_date.fromisoformat(e.date) < dt_date.today()
+    } for e in filtered]
+
+    return jsonify({"matches": results})
+
 # helper function to convert entry to dictionary
+from datetime import date as dt_date
 def entry_to_dict(entry):
+    event_date = dt_date.fromisoformat(entry.date)
+    is_past = event_date < dt_date.today()
+
     return {
+        'id': entry.id,
         'img': entry.img,
         'title': entry.title,
         'date': entry.date,
         'location': entry.location,
         'description': entry.description,
+        'isPast': is_past
     }
 
 # route to fetch resources from database    

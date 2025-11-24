@@ -172,3 +172,21 @@ input:focus {
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba(196,2,51,0.4);
 }
+
+.filter-dropdown {
+    width: 50%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    border: 2px solid #ddd;
+    font-size: 16px;
+    background: #f8f9fa;
+    cursor: pointer;
+    text-align: center;
+}
+
+.past-event {
+  opacity: 1;
+  background: #DCDCDC !important;
+  filter: grayscale(100%);
+}

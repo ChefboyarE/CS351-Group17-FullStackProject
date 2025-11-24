@@ -7,6 +7,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from backend import db, bcrypt
 from backend.models import User, Event
 from datetime import datetime, date as dt_date
+from backend.bloom_filters import add_event_to_filters
 
 # Create a Blueprint
 auth = Blueprint('auth', __name__)
@@ -71,43 +72,98 @@ def logout():
 # resourcesSubmission route
 @auth.route("/resourceSubmission", methods=["POST"])
 def resourceSubmission():
-    data = request.get_json() # get JSON data from React
+    data = request.get_json()
     img = data.get("img").strip()
     title = data.get("title").strip().lower()
     date = data.get("date").strip()
     location = data.get("location").strip().lower()
     description = data.get("description").strip()
     user_today = data.get("today")
-    
+
     if not all([img, title, date, location, description, user_today]):
         return jsonify({"success": False, "message": "One or more fields are missing"}), 400
 
-    # Dates can only be chosen from current day onward. Cannot choose a day that has passed already
+    # Use user's local date
     try:
         event_date = datetime.strptime(date, "%Y-%m-%d").date()
         today_date = datetime.strptime(user_today, "%Y-%m-%d").date()
     except ValueError:
         return jsonify({"success": False, "message": "Invalid date format"}), 400
 
+    # Correct validation
     if event_date < today_date:
         return jsonify({"success": False, "message": "Event date cannot be in the past"}), 400
 
-    if event_date < dt_date.today():
-        return jsonify({"success": False, "message": "Event date cannot be in the past"}), 400
-
-    # Check for duplicate event with same Title and Date
+    # Duplicate check
     existing_event = Event.query.filter_by(title=title, date=date).first()
     if existing_event:
         return jsonify({"success": False, "message": "Event already exists"}), 400
 
     try:
-        # add event to the databbase
-        new_event = Event(img=img, title=title, date=date, location=location, description=description)
+        new_event = Event(img=img, title=title, date=date,
+                          location=location, description=description)
         db.session.add(new_event)
         db.session.commit()
-        # redirect back to resources page
+
+        add_event_to_filters(new_event)
+
         return jsonify({"success": True, "message": "Event added successfully"})
 
-    except Exception as e:
+    except Exception:
         db.session.rollback()
         return jsonify({"success": False, "message": "Duplicate event not allowed"}), 400
+
+# backend/auth.py
+from flask_login import login_required, current_user
+from backend.models import Event
+from backend import db
+
+# UPDATE event
+@auth.route("/events/<int:event_id>", methods=["PUT"])
+@login_required
+def update_event(event_id):
+    event = Event.query.get_or_404(event_id)
+
+    # If you later add owner logic, check:
+    # if event.user_id != current_user.id:
+    #     return jsonify({"success": False, "message": "Not authorized"}), 403
+
+    data = request.get_json()
+
+    # Update fields if present
+    title = data.get("title", "").strip()
+    date = data.get("date", "").strip()
+    location = data.get("location", "").strip()
+    description = data.get("description", "").strip()
+    img = data.get("img", "").strip()
+
+    if title:
+        event.title = title.lower()
+    if date:
+        event.date = date
+    if location:
+        event.location = location.lower()
+    if description:
+        event.description = description
+    if img:
+        event.img = img
+
+    db.session.commit()
+
+    return jsonify({"success": True, "message": "Event updated"})
+
+
+# DELETE event
+@auth.route("/events/<int:event_id>", methods=["DELETE"])
+@login_required
+def delete_event(event_id):
+    event = Event.query.get_or_404(event_id)
+
+    # If you later add ownership:
+    # if event.user_id != current_user.id:
+    #     return jsonify({"success": False, "message": "Not authorized"}), 403
+
+    db.session.delete(event)
+    db.session.commit()
+
+    return jsonify({"success": True, "message": "Event deleted"})

@@ -49,7 +49,7 @@ function Submission({onLogin}) {
         // If user never uploads an image, img will just be defualt UIC logo
         const imageToSend = preview ? img : DEFAULT_IMAGE;
         // Users local date format
-        const userToday = new Date().toISOString().split("T")[0];
+        const userToday = today;
 
         // call Flask
         try {
