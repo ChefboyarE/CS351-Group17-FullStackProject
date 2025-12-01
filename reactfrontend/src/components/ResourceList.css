@@ -29,7 +29,7 @@ body {
   color: white;
   border: none;
   padding: 12px 22px;
-  border-radius: 12px;
+  border-radius: 25px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
@@ -37,7 +37,7 @@ body {
 }
 
 .logout-btn:hover {
-  transform: translateY(-2px);
+  transform: scale(105%);
   box-shadow: 0 10px 25px rgba(196, 2, 51, 0.4);
 }
 
@@ -50,8 +50,8 @@ body {
   font-size: 28px;
   font-weight: 600;
   cursor: pointer;
-  width: 55px;
-  height: 55px;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -61,24 +61,25 @@ body {
 }
 
 .submit-btn:hover {
-  transform: translateY(-2px);
+  transform: scale(105%);
   box-shadow: 0 10px 25px rgba(196, 2, 51, 0.4);
 }
 
 /* ------------------ Search Bar ------------------ */
 .search-container {
-  width: 100%;
   position: relative;
   margin: 20px 0;
+  min-width: 100%;
 }
 
 .search-container input {
   width: 100%;
   padding: 15px 20px;
   border: 2px solid #ccc;
-  border-radius: 12px;
+  border-radius: 20px;
   font-size: 16px;
   background: #ffffff;
+  box-sizing: border-box;
 }
 
 .search-container input:focus {
@@ -89,19 +90,24 @@ body {
 }
 
 /* ------------------- Suggestions Box ------------------ */
-#suggestions {
+.suggestions {
+  display: none;
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
   background: white;
-  border: 1px solid #ccc;
   border-top: none;
   max-height: 150px;
   overflow-y: auto;
   z-index: 100;
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 25px 25px;
   padding-bottom: 5px;
+}
+
+.suggestions.is-active {
+  display: block;
+  border: 1px solid #ccc;
 }
 
 .suggestion-item {
@@ -115,12 +121,48 @@ body {
 
 /* ------------------ Resource Container ------------------ */
 .resource-container {
+  display: flex;
+  flex-direction: column;
   background: white;
-  padding: 30px;
-  border-radius: 16px;
+  padding: 50px;
+  /* align-items: center; */
+  border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.15);
   text-align: left;
   margin-top: 20px;
+}
+
+.resource-container button{
+  margin: 2px;
+}
+
+.resource-container .search-container {
+  max-width:85%;
+}
+
+.resource-container .submit-btn {
+  border-radius: 50px;
+}
+
+.resource-container .search-btn {
+  background: linear-gradient(135deg, #C40233 0%, #E06666 100%);
+  color: white;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 25px;
+  width: 80px;
+  height: 40px;
+  margin: 3px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  margin-top: 8px;
+}
+
+.resource-container .search-btn:hover {
+  transform: scale(105%);
+  box-shadow: 0 10px 25px rgba(196, 2, 51, 0.4);
 }
 
 /* ------------------ Scroll Container ------------------ */
@@ -137,7 +179,7 @@ body {
 
 .resource-scroll::-webkit-scrollbar-thumb {
   background: rgba(0,0,0,0.3);
-  border-radius: 6px;
+  border-radius: 25px;
 }
 
 /* ------------------ Resource List Items ------------------ */
@@ -154,7 +196,7 @@ body {
   padding: 15px;
   border-bottom: 1px solid #ddd;
   background: #fafafa;
-  border-radius: 12px;
+  border-radius: 20px;
   margin-bottom: 12px;
 }
 
@@ -173,7 +215,7 @@ body {
   width: 60px;
   height: 60px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 25px;
 }
 
 /* ------------------ Resource Text ------------------ */
@@ -204,7 +246,7 @@ body {
 .edit-btn,
 .delete-btn {
   padding: 6px 12px;
-  border-radius: 8px;
+  border-radius: 25px;
   font-size: 14px;
   border: none;
   cursor: pointer;
@@ -232,4 +274,40 @@ body {
   margin-top: 10px;
   color: #333;
   font-weight: 600;
+}
+
+/* ------------------ filter-dropdown ------------------ */
+.filter-dropdown {
+  font-size: 16px;
+  padding: 10px 15px;
+  width: 100%;
+  height: 40px;
+
+  border: 2px solid #ccc;
+  border-radius: 20px;
+}
+
+.filter-dropdown option {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 200px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-top: none;
+  box-shadow: 0 4px 10px rgba(255, 0, 0, 0.1);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-radius: 0 0 10px 10px;
+}
+
+.filter-dropdown:focus{
+  border: 2px solid #C40233
+}
+
+
+/* ------------------ toggle container ------------------ */
+.toggle-container {
+  margin-top: 8px;
 }
