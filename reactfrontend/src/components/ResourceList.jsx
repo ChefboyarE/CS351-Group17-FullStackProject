@@ -21,6 +21,7 @@ function ResourceList() {
         location: "",
         description: "",
     });
+    const suggestionBox = document.querySelector('.suggestions')
 
     // Load database resources on mount
     useEffect(() => {
@@ -73,6 +74,7 @@ function ResourceList() {
     // SEARCH
     const handleSearch = async (e) => {
         e.preventDefault();
+        suggestionBox.classList.remove("is-active")
         if (!query) return;
 
         try {
@@ -107,6 +109,7 @@ function ResourceList() {
         if (!value) {
             setSuggestions([]);
             setFilteredResources(resourcesList);
+            suggestionBox.classList.remove('is-active');
             return;
         }
 
@@ -116,6 +119,7 @@ function ResourceList() {
             );
             const data = await res.json();
             setSuggestions(data);
+            suggestionBox.classList.add('is-active');
         } catch (err) {
             console.error("Autocomplete error:", err);
         }
@@ -124,6 +128,7 @@ function ResourceList() {
     const handleSuggestionClick = (s) => {
         setQuery(s);
         setSuggestions([]);
+        suggestionBox.classList.remove('is-active')
     };
 
     // Delete an event
@@ -211,7 +216,7 @@ function ResourceList() {
     };
 
     return (
-        <>
+        <div className="page-wrapper">
             <button className="logout-btn" onClick={handleLogoutClick}>
                 Logout
             </button>
@@ -247,11 +252,7 @@ function ResourceList() {
                             onChange={handleInputChange}
                         />
 
-                        <button className="search-btn" type="submit">
-                            Search
-                        </button>
-
-                        <div id="suggestions">
+                        <div className="suggestions">
                             {suggestions.map((s, idx) => (
                                 <div
                                     key={idx}
@@ -262,6 +263,10 @@ function ResourceList() {
                                 </div>
                             ))}
                         </div>
+
+                        <button className="search-btn" type="submit">
+                            Search
+                        </button>
                     </div>
                 </form>
 
@@ -351,7 +356,7 @@ function ResourceList() {
                     </div>
                 )}
             </div>
-        </>
+        </div>
     );
 }
 
