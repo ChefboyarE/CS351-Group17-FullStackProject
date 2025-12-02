@@ -100,9 +100,11 @@ body {
   border-top: none;
   max-height: 150px;
   overflow-y: auto;
+  white-space: normal;
   z-index: 100;
   border-radius: 0 0 25px 25px;
   padding-bottom: 5px;
+  scrollbar-width: none;
 }
 
 .suggestions.is-active {
@@ -142,6 +144,10 @@ body {
 
 .resource-container .submit-btn {
   border-radius: 50px;
+}
+
+.resource-container h1 {
+  color: #C40233;
 }
 
 .resource-container .search-btn {
