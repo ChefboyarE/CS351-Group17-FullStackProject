@@ -28,4 +28,4 @@ class Event(db.Model):
     description = db.Column(db.Text, nullable=False)
 
     # To prevent duplicates in the table
-    __table_args__ = (UniqueConstraint('title', 'date', name='unique_title_date'),)
+    __table_args__ = (UniqueConstraint('title', 'date', 'location', name='unique_title_date_location'),)

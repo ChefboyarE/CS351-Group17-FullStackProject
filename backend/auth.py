@@ -8,6 +8,9 @@ from backend import db, bcrypt
 from backend.models import User, Event
 from datetime import datetime, date as dt_date
 from backend.bloom_filters import add_event_to_filters
+from backend.dup_event_filter import add_event_to_filter
+from backend.dup_event_filter import event_might_match
+import sys
 
 # Create a Blueprint
 auth = Blueprint('auth', __name__)
@@ -95,7 +98,16 @@ def resourceSubmission():
         return jsonify({"success": False, "message": "Event date cannot be in the past"}), 400
 
     # Duplicate check
-    existing_event = Event.query.filter_by(title=title, date=date).first()
+    # existing_event = Event.query.filter_by(title=title, date=date).first()
+    # if existing_event:
+    #     return jsonify({"success": False, "message": "Event already exists"}), 400
+    
+    # use bloom filter to check duplicates
+    # print(f"{title+date+location}", file=sys.stdout)
+    existing_event = event_might_match(title+date+location)
+    if existing_event:
+        # handle false positives
+        existing_event = Event.query.filter_by(title=title, date=date, location=location).first()
     if existing_event:
         return jsonify({"success": False, "message": "Event already exists"}), 400
 
@@ -106,12 +118,13 @@ def resourceSubmission():
         db.session.commit()
 
         add_event_to_filters(new_event)
+        add_event_to_filter(title + date + location)
 
         return jsonify({"success": True, "message": "Event added successfully"})
 
     except Exception:
         db.session.rollback()
-        return jsonify({"success": False, "message": "Duplicate event not allowed"}), 400
+        return jsonify({"success": False, "message": f"Duplicate event not allowed"}), 400
 
 # backend/auth.py
 from flask_login import login_required, current_user
@@ -120,7 +133,7 @@ from backend import db
 
 # UPDATE event
 @auth.route("/events/<int:event_id>", methods=["PUT"])
-@login_required
+# @login_required
 def update_event(event_id):
     event = Event.query.get_or_404(event_id)
 
@@ -155,7 +168,7 @@ def update_event(event_id):
 
 # DELETE event
 @auth.route("/events/<int:event_id>", methods=["DELETE"])
-@login_required
+# @login_required
 def delete_event(event_id):
     event = Event.query.get_or_404(event_id)
 
