@@ -25,7 +25,7 @@ body {
 }
 
 .signup-container h1 {
-  color: #C40233;  /* UIC red */
+  color: #C40233;
   margin-bottom: 25px;
   font-size: 2em;
   font-weight: 700;
@@ -38,10 +38,11 @@ body {
   padding: 15px;
   margin-bottom: 18px;
   border: 2px solid #ccc;
-  border-radius: 12px;
+  border-radius: 20px;
   font-size: 16px;
   background: #f8f9fa;
   transition: 0.25s ease;
+  box-sizing: border-box;
 }
 
 .signup-container input:focus {
@@ -61,7 +62,7 @@ body {
   font-size: 17px;
   font-weight: 600;
   border: none;
-  border-radius: 12px;
+  border-radius: 25px;
   cursor: pointer;
   transition: 0.25s;
 }
@@ -80,7 +81,7 @@ body {
 }
 
 .signup-container a {
-  color: #006aff; /* consistent with edit button color */
+  color: #006aff;
   text-decoration: none;
 }
 

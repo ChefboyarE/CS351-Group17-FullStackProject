@@ -72,7 +72,7 @@ function ResourceList() {
 
             const data = await res.json();
             setFilteredResources(data.matches);
-            setResult(`Filtering by ${type}`);
+            setResult(`Sorting by ${type}`);
         } catch (err) {
             console.error("Filter error:", err);
         }
@@ -174,6 +174,10 @@ function ResourceList() {
             description: event.description,
             today: getLocalToday(),
         });
+        window.scrollTo({
+            top:0,
+            behavior: 'smooth'
+        })
     };
 
     // Save edit
@@ -234,7 +238,7 @@ function ResourceList() {
                 <h1>UIC Resources</h1>
 
                 <select className="filter-dropdown" value={filterType} onChange={handleFilterChange}>
-                    <option value="">Filter by...</option>
+                    <option value="">Sort by...</option>
                     <option value="title">Title</option>
                     <option value="location">Location</option>
                     <option value="date">Date</option>
@@ -278,6 +282,63 @@ function ResourceList() {
                     </div>
                 </form>
 
+                {editingEvent && (
+                    <div className="edit-modal">
+                        <h2>Edit Event</h2>
+                        <form onSubmit={handleEditSave} className="edit-form">
+                            <input
+                                className="title-field"
+                                type="text"
+                                placeholder="Title"
+                                value={editForm.title}
+                                maxLength={85}
+                                onChange={(e) =>
+                                    setEditForm({...editForm, title: e.target.value})
+                                }
+                                required
+                            />
+                            <div className="date-location-container">
+                                <input
+                                    className="date-field"
+                                    type="date"
+                                    value={editForm.date}
+                                    onChange={(e) =>
+                                        setEditForm({...editForm, date: e.target.value})
+                                    }
+                                    required
+                                />
+                                <input
+                                    className="location-field"
+                                    type="text"
+                                    placeholder="Location"
+                                    value={editForm.location}
+                                    maxLength={85}
+                                    onChange={(e) =>
+                                        setEditForm({...editForm, location: e.target.value})
+                                    }
+                                    required
+                                />
+                            </div>
+                            <textarea
+                                className="description-field"
+                                type="text"
+                                placeholder="Description"
+                                value={editForm.description}
+                                maxLength={2500}
+                                onChange={(e) =>
+                                    setEditForm({...editForm, description: e.target.value})
+                                }
+                                required
+                            />
+
+                            <div className="edit-actions">
+                                <button type="submit" className="save-btn">Save</button>
+                                <button type="button" className="cancel-btn" onClick={cancelEdit}>Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                )}
+
                 {result && <p id="result">{result}</p>}
 
                 <ul className="resource-list">
@@ -316,53 +377,6 @@ function ResourceList() {
                             </li>
                         ))}
                 </ul>
-                {editingEvent && (
-                    <div className="edit-modal">
-                        <h2>Edit Event</h2>
-                        <form onSubmit={handleEditSave} className="edit-form">
-                            <input
-                                type="text"
-                                placeholder="Title"
-                                value={editForm.title}
-                                onChange={(e) =>
-                                    setEditForm({...editForm, title: e.target.value})
-                                }
-                                required
-                            />
-                            <input
-                                type="date"
-                                value={editForm.date}
-                                onChange={(e) =>
-                                    setEditForm({...editForm, date: e.target.value})
-                                }
-                                required
-                            />
-                            <input
-                                type="text"
-                                placeholder="Location"
-                                value={editForm.location}
-                                onChange={(e) =>
-                                    setEditForm({...editForm, location: e.target.value})
-                                }
-                                required
-                            />
-                            <input
-                                type="text"
-                                placeholder="Description"
-                                value={editForm.description}
-                                onChange={(e) =>
-                                    setEditForm({...editForm, description: e.target.value})
-                                }
-                                required
-                            />
-
-                            <div className="edit-actions">
-                                <button type="submit" className="save-btn">Save</button>
-                                <button type="button" className="cancel-btn" onClick={cancelEdit}>Cancel</button>
-                            </div>
-                        </form>
-                    </div>
-                )}
             </div>
         </div>
     );
