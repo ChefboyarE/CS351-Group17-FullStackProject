@@ -21,8 +21,7 @@ function Login() {
 
       const data = await res.json();
       if (data.success) {
-        login(); //pass data returned by Flask
-        // onLogin(); // trigger redirect in App.jsx
+        login(data); //pass data returned by Flask
       } else {
         alert("Invalid login");
       }
