@@ -1,4 +1,5 @@
 import {createContext, useState, useContext, useEffect} from 'react';
+import { data } from 'react-router-dom';
 
 const AuthContext = createContext(null);
 
@@ -12,6 +13,7 @@ export const AuthProvider = ({children}) => {
     const login = (userData) => {
         // store data
         localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('id', userData.id)
         setIsLoggedIn(true);
         // localStorage.setItem('user', JSON.stringify(userData))
     };
@@ -19,6 +21,7 @@ export const AuthProvider = ({children}) => {
     // handle logout
     const logout = () => {
         localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('id')
         // localStorage.removeItem('user');
         // alert("logged out")
         setIsLoggedIn(false);
