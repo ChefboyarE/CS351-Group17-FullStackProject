@@ -132,10 +132,12 @@ body {
   box-shadow: 0 10px 30px rgba(0,0,0,0.15);
   text-align: left;
   margin-top: 20px;
+  width: 55vh;
 }
 
 .resource-container button{
-  margin: 2px;
+  margin-right: 10px;
+  margin-top: 6px;
 }
 
 .resource-container .search-container {
@@ -254,25 +256,29 @@ body {
   padding: 6px 12px;
   border-radius: 25px;
   font-size: 14px;
-  border: none;
   cursor: pointer;
-  color: white;
+  /* color: white; */
 }
 
 .edit-btn {
-  background: #006aff;
+  background: #ffffff;
+  color: #007fae;
+  border: 1px solid #007fae
 }
 
 .edit-btn:hover {
-  background: #0050d4;
+  background: #007fae;
+  color: #ffffff
 }
 
 .delete-btn {
-  background: #ff2d2d;
+  background: none;
+  border: none;
+  color: #c4002e;
 }
 
 .delete-btn:hover {
-  background: #d20000;
+  color: black;
 }
 
 /* ------------------ Search Result Message ------------------ */
@@ -312,8 +318,100 @@ body {
   border: 2px solid #C40233
 }
 
-
 /* ------------------ toggle container ------------------ */
 .toggle-container {
   margin-top: 8px;
+}
+
+
+/* --------------- edit modal ---------------------------- */
+.edit-modal {
+  display: flex;
+  padding: 50px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 15px;
+  border-bottom: 1px solid #dddddd;
+  background: #fafafa;
+  border-radius: 20px;
+  margin-bottom: 30px;
+  box-sizing: border-box;
+}
+
+.edit-modal h2{
+  color: #C40233;
+}
+
+.edit-modal .date-location-container {
+  display: flex;
+  flex-direction: row;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.edit-modal .title-field {
+  font-size: 22px;
+  min-width: 100%;
+  font-weight: bold;
+  height: 35px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.edit-modal .date-field {
+  font-size: 15px;
+  height: 30px;
+  margin-bottom: 10px;
+}
+
+.edit-modal .location-field {
+  font-size: 15px;
+  height: 30px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  width: 100%;
+  margin-right: 0px;
+}
+
+.edit-modal .description-field {
+  box-sizing: border-box;
+  font-size: 15px;
+  width: 100%;
+  min-height: 150px;
+  margin-right: 0%;
+  resize: vertical;
+}
+
+.edit-modal .edit-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.edit-modal button {
+  border-radius: 50px;
+}
+
+.edit-modal .save-btn{
+  margin-top: 15px;
+  background: linear-gradient(135deg, #c4002e, #e54747);
+  color: #fff;
+  border: 1px solid #C40233
+}
+
+.edit-modal .save-btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(196, 0, 46, 0.35);
+  cursor: pointer;
+}
+
+.edit-modal .cancel-btn{
+  border: none;
+  background: none;
+}
+
+.edit-modal .cancel-btn:hover{
+  cursor: pointer;
+  color: #C40233;
 }
