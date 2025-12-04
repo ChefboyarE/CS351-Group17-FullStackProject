@@ -1,7 +1,7 @@
 /* ------------------ Page Layout ------------------ */
 
 .submission-page {
-  max-width: 900px;
+  max-width: 100%;
   margin: 40px auto;
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -131,4 +131,114 @@
   .submit-btn {
     font-size: 16px;
   }
+}
+
+/* -------------------- Submission Container --------------------- */
+.resource-submission-container {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 50px;
+  /* align-items: center; */
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  text-align: left;
+  margin-top: 20px;
+  width: 55vh;
+}
+
+.resource-submission-container h1 {
+  color: #C40233;
+}
+
+/* .resource-submission-container input {
+  width: 100%;
+  margin-bottom: 10px;
+} */
+
+.resource-submission-container .title-field {
+  font-size: 22px;
+  min-width: 100%;
+  font-weight: bold;
+  height: 35px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.resource-submission-container .date-location-container {
+  display: flex;
+  flex-direction: row;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.resource-submission-container .date-field {
+  font-size: 15px;
+  height: 30px;
+  margin-bottom: 10px;
+}
+
+.resource-submission-container .location-field {
+  font-size: 15px;
+  height: 30px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  width: 100%;
+  margin-right: 0px;
+}
+
+.resource-submission-container .description-field {
+  box-sizing: border-box;
+  font-size: 15px;
+  width: 100%;
+  min-height: 150px;
+  margin-right: 0%;
+  resize: vertical;
+}
+
+.resource-submission-container .upload-title {
+  margin-top: 25px;
+  font-size: 18px;
+  font-weight: bold;
+  color: grey;
+  margin-bottom: 2px;
+}
+
+.resource-submission-container .upload-subtitle {
+  color: #C40233;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.resource-submission-container button {
+  padding: 12px 20px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.resource-submission-container .upload-btn {
+  margin-top: 5px;
+  background: #ffffff;
+  color: #007fae;
+  border: 1px solid #007fae;
+}
+
+.resource-submission-container .upload-btn:hover {
+  background: #007fae;
+  color: #fff;
+}
+
+.resource-submission-container .sub-btn {
+  margin-top: 15px;
+  background: linear-gradient(135deg, #c4002e, #e54747);
+  color: #fff;
+  border: 1px solid #C40233
+}
+
+.resource-submission-container .sub-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(196, 0, 46, 0.35);
 }
