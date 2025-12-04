@@ -20,7 +20,14 @@ function ResourceList() {
         date: "",
         location: "",
         description: "",
+        today: "",
     });
+
+    const getLocalToday = () => {
+    const d = new Date();
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().split("T")[0];
+};
     const suggestionBox = document.querySelector('.suggestions')
 
     // Load database resources on mount
@@ -165,6 +172,7 @@ function ResourceList() {
             date: event.date,
             location: event.location,
             description: event.description,
+            today: getLocalToday(),
         });
     };
 
