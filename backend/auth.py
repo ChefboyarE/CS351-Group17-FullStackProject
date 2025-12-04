@@ -149,6 +149,30 @@ def update_event(event_id):
     location = data.get("location", "").strip()
     description = data.get("description", "").strip()
     img = data.get("img", "").strip()
+    user_today = data.get("today")
+
+    # error checking
+    if not all([title, date, location, description, user_today]):
+        return jsonify({"success": False, "message": "One or more fields are missing"}), 400
+
+    # Use user's local date
+    try:
+        event_date = datetime.strptime(date, "%Y-%m-%d").date()
+        today_date = datetime.strptime(user_today, "%Y-%m-%d").date()
+    except ValueError:
+        return jsonify({"success": False, "message": "Invalid date format"}), 400
+
+    # Correct validation
+    if event_date < today_date:
+        return jsonify({"success": False, "message": "Event date cannot be in the past"}), 400
+
+
+    existing_event = event_might_match(title+date+location)
+    if existing_event:
+        # handle false positives
+        existing_event = Event.query.filter_by(title=title, date=date, location=location).first()
+    if existing_event:
+        return jsonify({"success": False, "message": "Event already exists"}), 400
 
     if title:
         event.title = title.lower()
