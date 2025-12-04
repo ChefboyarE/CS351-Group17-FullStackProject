@@ -220,14 +220,15 @@
 }
 
 .resource-submission-container .upload-btn {
+  padding: 10px 18px;
   margin-top: 5px;
   background: #ffffff;
-  color: #007fae;
-  border: 1px solid #007fae;
+  color: #c40233;
+  border: 1px solid #c40233;
 }
 
 .resource-submission-container .upload-btn:hover {
-  background: #007fae;
+  background: #c40233;
   color: #fff;
 }
 
