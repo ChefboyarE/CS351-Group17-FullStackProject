@@ -83,44 +83,55 @@ function Submission({onLogin}) {
     };
 
     return (
-        <div className="resource-container">
+        <div className="resource-submission-container">
             <a href="/resources" className="submit-btn">{"\u2190"}</a>
             <h1>Resource Submission</h1>
             <form onSubmit={handleSubmit}>
                 <input
+                    id = "title-input"
+                    className = "title-field"
                     type="title"
                     placeholder="Title"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    maxLength={85}
                     required
                 />
-                <input
-                    type="date"
-                    placeholder="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    min={today}
-                    max="9999-12-31"
-                    required
-                />
-                <input
-                    type="location"
-                    placeholder="location"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    required
-                />
-                <input
+                <div className="date-location-container">
+                    <input
+                        id = "date-input"
+                        className = "date-field"
+                        type="date"
+                        placeholder="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        min={today}
+                        max="9999-12-31"
+                        required
+                    />
+                    <input
+                        id = "location-input"
+                        className = "location-field"
+                        type="location"
+                        placeholder="location"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        maxLength={85}
+                        required
+                    />
+                </div>
+                <textarea
+                    id = "description-input"
+                    className = "description-field"
                     type="description"
                     placeholder="description"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
+                    maxLength={2500}
                     required
                 />
                 <div className="upload-box">
                     <p className="upload-title">Enter an image file</p>
-                    <p className="upload-subtitle">Empty or invalid images will result in a default image</p>
-
                     <button
                         type="button"
                         className="upload-btn"
@@ -128,6 +139,7 @@ function Submission({onLogin}) {
                     >
                         Choose File
                     </button>
+                    <p className="upload-subtitle">*Empty or invalid images will result in a default image</p>
 
                     <input
                         id="imageInput"
@@ -137,7 +149,7 @@ function Submission({onLogin}) {
                         onChange={handleImageUpload}
                     />
                 </div>
-                <button type="submit">Submit Event</button>
+                <button className = "sub-btn" type="submit">Submit Event</button>
             </form>
         </div>
     )
