@@ -84,7 +84,7 @@ function Submission({onLogin}) {
 
     return (
         <div className="resource-submission-container">
-            <a href="/resources" className="submit-btn">{"\u2190"}</a>
+            <a href="/resources" className="back-btn">{"\u2190"}</a>
             <h1>Resource Submission</h1>
             <form onSubmit={handleSubmit}>
                 <input

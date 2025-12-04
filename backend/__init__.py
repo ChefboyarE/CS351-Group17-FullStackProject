@@ -48,7 +48,10 @@ def create_app():
 
     # instantiate sql table
     with app.app_context():
+        from backend.dup_event_filter import build_filter
         db.create_all()
+
+        build_filter()
 
     # Create tables and build bloom filters
     with app.app_context():
