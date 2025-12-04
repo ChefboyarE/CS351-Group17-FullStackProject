@@ -53,6 +53,16 @@ function Submission({onLogin}) {
 
         // call Flask
         try {
+            if (title.length > 85) {
+                alert("please limit title to 85 characters!")
+                return
+            }
+
+            if (description.length > 2500) {
+                alert("please limit description to 2500 characters!")
+                return
+            }
+
             const res = await fetch("http://127.0.0.1:5000/resourceSubmission", {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
